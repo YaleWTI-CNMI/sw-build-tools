@@ -1,0 +1,39 @@
+--- setup.py.orig	2024-02-12 23:47:06.685520631 -0500
++++ setup.py	2024-02-12 23:50:45.056850155 -0500
+@@ -86,6 +86,26 @@
+         library_found = os.path.exists(candidate_path)
+         if library_found:
+             break
++    # Lookup in PKG_CONFIG_PATH
++    if not library_found:
++        print(f"Checking PKG_CONFIG_PATH")
++        pkg_config_path = os.environ["PKG_CONFIG_PATH"].split(":")
++        for folder in pkg_config_path:
++            print(folder)
++            print(name)
++            if name in folder:
++                library_found = os.path.exists(folder)
++                pkg_config = folder+"/"+name+".pc"
++                print(pkg_config)
++                pkg_config_file = open(pkg_config, "r")
++                for line in pkg_config_file:
++                    if "libdir=" in line:
++                        lib_folder = line.split("=")[1].strip()
++                        print(lib_folder)
++                    if "includedir=" in line:
++                        include_folder = line.split("=")[1].strip()
++                        print(include_folder)
++
+ 
+     if not library_found:
+         print(f"Running build on conda-build: {is_conda_build}")
+@@ -300,7 +320,8 @@
+     image_macros += [("PNG_FOUND", str(int(use_png)))]
+ 
+     # Locating libjpeg
+-    (jpeg_found, jpeg_conda, jpeg_include, jpeg_lib) = find_library("jpeglib", vision_include)
++#   (jpeg_found, jpeg_conda, jpeg_include, jpeg_lib) = find_library("jpeglib", vision_include)
++    (jpeg_found, jpeg_conda, jpeg_include, jpeg_lib) = find_library("libjpeg", vision_include)
+ 
+     use_jpeg = use_jpeg and jpeg_found
+     if use_jpeg:
