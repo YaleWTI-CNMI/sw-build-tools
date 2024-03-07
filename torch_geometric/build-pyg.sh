@@ -14,11 +14,11 @@ export PYTHONPATH=${_PREFIX}/lib/python3.10/site-packages:\$PYTHONPATH
 export PATH=${_PREFIX}/bin:\$PATH" > ${_PREFIX}/env.sh
 
 echo "
-Torch Geometric has been installed in ${_PREFIX}/lib/python3.10/site-packages.
+PyTorch Geometric has been installed in ${_PREFIX}/lib/python3.10/site-packages.
 Please run 
 
        source ${_PREFIX}/env.sh
 
-before using this installation of Torch Geometric.
+before using PyTorch Geometric.
 
 "
